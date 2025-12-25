@@ -1,76 +1,41 @@
-# ML 14-Day Theme Sprint
+# ML Labs
 
-This repository contains a structured, short-term exploration of core machine learning themes using a unified experimental setup.  
-The goal is to compare different ML directions through **reproducible experiments, consistent evaluation, and clear documentation**, and then expand one direction into a deeper project.
+A modular machine learning experimentation repository focused on
+training dynamics, optimization behavior, and generalization on
+standard vision benchmarks.
 
----
-
-## What This Project Does
-- Runs controlled experiments across multiple machine learning themes
-- Uses a shared dataset, model, and training pipeline for fair comparison
-- Emphasizes clean logging, evaluation, and interpretation of results
-- Produces artifacts (figures, tables, summaries) that can be extended into a larger study
+This project is designed to keep **code, experiments, and notes cleanly separated**,
+with all results reproducible by re-running experiments locally.
 
 ---
 
-## Themes Explored
-The project explores four machine learning directions:
+## Project Goals
 
-1. **Optimization & Generalization**  
-   Training dynamics, optimizer behavior, and robustness under stress tests.
-
-2. **Uncertainty & Probabilistic ML**  
-   Model confidence, calibration, and reliability of predictions.
-
-3. **Representation Learning (Self-Supervised)**  
-   Learning transferable embeddings without labels and evaluating them rigorously.
-
-4. **Efficient ML Systems**  
-   Benchmarking and improving inference and training efficiency.
+- Build a **clean, reusable ML training pipeline**
+- Study how **optimization choices** affect learning behavior
+- Run **controlled experiments** with minimal confounders
+- Maintain **professional ML repo hygiene** (no datasets or raw runs in Git)
 
 ---
 
 ## Repository Structure
 
-ML-labs/
-├── README.md                     # Project overview & navigation
+```text
+ml-labs/
 │
-├── mini/                         # Theme-specific summaries (NO CODE)
-│   ├── 01_optimization/
-│   │   └── README.md
-│   ├── 02_uncertainty/
-│   │   └── README.md
-│   ├── 03_self_supervised/
-│   │   └── README.md
-│   └── 04_efficiency/
-│       └── README.md
+├── Common/
+│   ├── __init__.py
+│   ├── data.py        # Dataset loading and preprocessing
+│   ├── model.py       # Model definitions
+│   └── train.py       # Training and evaluation pipeline
 │
-├── common/                       # Shared implementation code
-│   ├── data.py
-│   ├── model.py
-│   ├── train.py
-│   └── utils.py
+├── mini/
+│   ├── README.md      # Experiment summaries and notes
+│   └── 01_optimization/
+│       └── README.md  # Optimizer and learning-rate experiments
 │
-├── runs/                         # Experiment logs & checkpoints
+├── reports/
+│   └── README.md      # Cross-experiment analysis and writeups
 │
-├── results/                      # Figures & tables
-│
-├── reports/                      # Cross-theme reasoning & planning
-│   ├── decision_memo.md
-│   └── project_spec.md
-
-
-
----
-
-## How to Navigate the Project
-- Start with `mini/` for high-level summaries of each theme
-- Use `common/` for implementation details
-- Refer to `reports/` for comparisons and planning
-- Generated experiment outputs are organized under `runs/` and `results/`
-
----
-
-## Status
-🚧 In progress — experiments and documentation will be updated as the project evolves.
-
+├── .gitignore
+└── README.md
