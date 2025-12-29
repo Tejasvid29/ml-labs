@@ -7,25 +7,36 @@ import torch.optim as optim
 
 from Common.data import get_dataloaders
 from Common.model import get_model
+from Common.utils import make_run_dir, save_config, set_seed
 
 def parse_args():
     parser = argparse.ArgumentParser()
+    parser.add_argument("--optimizer", type=str, default="adamw")
     parser.add_argument("--epochs", type = int, default=5)
     parser.add_argument("--batch_size", type=int, default = 128)
     parser.add_argument("--lr", type=float, default = 1e-3)
     parser.add_argument("--run_name", type=str, default = "baseline")
+    parser.add_argument("--runs_root", type=str, default="runs")
+    parser.add_argument("--seed", type=int, default=42)
     return parser.parse_args()
 
-def prepare_run_dir(run_name): #creates a new file to keep records isolated and clean
-    run_dir = os.path.join("runs", run_name)
-    os.makedirs(run_dir, exist_ok = True)
-    return run_dir
+# def prepare_run_dir(run_name): #creates a new file to keep records isolated and clean
+#     run_dir = os.path.join("runs", run_name)
+#     os.makedirs(run_dir, exist_ok = True)
+#     return run_dir
 
 def main():
     args = parse_args()
-
+    set_seed(args.seed)
+    
     #Prepare run directory
-    run_dir = prepare_run_dir(args.run_name)
+    run_dir = make_run_dir(args.runs_root, args.run_name)
+
+    config_path = f"{run_dir}/config.yaml"
+    save_config(vars(args), config_path)
+
+    metrics_path = f"{run_dir}/metrics.csv"
+    ckpt_path = f"{run_dir}/best.ckpt"
 
     #Devuce setup
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -41,7 +52,12 @@ def main():
 
     #Loss and optimizer
     criterion = nn.CrossEntropyLoss()
-    optimizer = optim.AdamW(model.parameters(), lr = args.lr)
+    if args.optimizer == "adamw":
+        optimizer = optim.AdamW(model.parameters(), lr=args.lr)
+    elif args.optimizer == "sgd":
+        optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=0.9)
+    else:
+        raise ValueError("Unsupported optimizer")
 
     #Training loop 
     model.train()
