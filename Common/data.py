@@ -7,7 +7,7 @@ from torch.utils.data import Subset
 #datasets provdies ready-made datasets like CIFAR-10
 #trasnforms defines how raw images are processed before the model sees them
 
-def get_dataloaders(batch_size = 128, num_workers = 2, aug_strength="weak"):
+def get_dataloaders(batch_size = 128, num_workers = 0, aug_strength="weak"):
 
 #batch_size - how many images per batch
 #num_workers - how many CPU processes load data in parallel
