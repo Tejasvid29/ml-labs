@@ -39,3 +39,27 @@ Despite moderate classification accuracy, the model exhibits severe miscalibrati
 -- Confidence is defined using maximum softmax probability, which is known to be poorly     calibrated.
 -- no class conditional or distributional uncertainty is modeled. 
 
+# --- Calibartion Improvement via Temperature Scaling
+
+### Method
+We apply **post-hoc temperature scaling** to the the trained ResNet-18. A single scalar temperature \(T\) is learned by minimizing **Negative Log-Likelihood (NLL)** on the evaluation set. Model weights remain frozen; only \(T\) is optimized. This procedure is designed to improve probability calibration **without changing predictions or accuracy**.
+
+### Results 
+- **Learned temperature:** \(T \ approx 1.16)
+- **Accuracy:** unchanged (0.337)
+- **Avg. confidence:** reduced (approx. 0.48)
+- **ECEE:** reduced substantially (from 0.188 to 0.144)
+
+The reliability diagram after temperature scaling shows predictions moving closer the diagonal. particulary in high-confidence bins.
+
+![Reliability Diagram (After Temperature Scaling)](../../results/figures/reliability_temp_scaled.png)
+
+### Interpretation
+Temperature scaling effectively reduces confidence while preserving classification accuracy, confirming that the primary issue was **miscalculated confidence**, not poor classs, ranking. Although miscaliration is not fully eliminated-especially at the highest confidence levels the improvement is substantial and consistent with prior findings in the calibration literature.
+
+### Limitations
+- Temperature is fit and evaluated on the same 1,000 sample subsets.
+- A single global temperature may not capture class-conditional or instance-dependent uncertainty. 
+
+### Takeaway
+Post-hoc calibration is a low-cost, high-impact method to improve the reliability of probabilistic predictions, making confidence scores more actionable without retraining the model.
